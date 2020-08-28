@@ -11,7 +11,7 @@ use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 class ImageController extends Controller
 {
-    public function index()
+    public function showImage()
     {
         $paginator = Image::Paginate(10);
         $imageList = $paginator->getCollection();
@@ -22,10 +22,25 @@ class ImageController extends Controller
         return response()->json($response, 200);
     }
 
+    public function showImageById($id)
+    {
+        if($image = Image::find($id)){
+            return fractal()
+            ->item($image)
+            ->transformWith(new ImageTransformer)
+            ->toArray();
+        }
+        
+        return response()->json([
+            'message' => 'Images not found'
+        ], 404);
+        
+    }
+
     public function add(Request $request, Image $image)
     {
         $this->validate($request, [
-            'title' => 'required|min:5|max:15',
+            'title' => 'required|min:5|max:100',
             'image' => 'required|image|max:2000',
         ]);
 
