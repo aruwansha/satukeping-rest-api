@@ -30,11 +30,10 @@ class ImageController extends Controller
             ->transformWith(new ImageTransformer)
             ->toArray();
         }
-        
+
         return response()->json([
             'message' => 'Images not found'
         ], 404);
-        
     }
 
     public function add(Request $request, Image $image)
